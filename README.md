@@ -1,6 +1,6 @@
 # gtk-emacs-theme-like.ahk
 
-[English](https://www.google.com/search?q=%23english) | [中文](https://www.google.com/search?q=%23chinese)
+[English](#english) | [中文](#chinese)
 
 **Bring Mac-style keybindings and Emacs navigation to Windows.** **在 Windows 上获得极致的 Mac 风格键位与 Emacs 导航体验。**
 
