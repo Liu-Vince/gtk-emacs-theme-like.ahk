@@ -7,6 +7,16 @@
 ; The following line is a contribution of NTEmacs wiki http://www49.atwiki.jp/ntemacs/pages/20.html
 SetKeyDelay 0
 
+; ; Swap Win and Alt keys
+; ; Left Alt -> Left Win
+; LAlt::LWin
+; ; Left Win -> Left Alt
+; LWin::LAlt
+; ; Right Alt -> Right Win
+; RAlt::RWin
+; ; Right Win -> Right Alt
+; RWin::RAlt
+
 ; Applications you want to disable emacs-like keybindings
 ; (Please comment out applications you don't use)
 is_target() {
