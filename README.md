@@ -121,7 +121,12 @@ The script supports two methods for swapping Win and Alt keys:
 **Method 1: Registry-Based Swap (Recommended)**
 - **Pros:** Zero latency, no state sync issues, completely eliminates Win key stuck problem
 - **Cons:** Requires admin rights, system restart needed
-- **How to:**
+- **How to (Option A - Use provided .reg files):**
+  1. Double-click **`swap-win-alt.reg`** to apply Win/Alt swap
+  2. Restart your computer
+  3. Keep the AHK script as-is (don't uncomment lines 82-91)
+  4. (To undo: double-click **`restore-keyboard.reg`** and restart)
+- **How to (Option B - Use SharpKeys GUI):**
   1. Download **[SharpKeys](https://github.com/randyrants/sharpkeys)** (free, open-source)
   2. Configure mappings:
      - Left Windows → Left Alt
@@ -351,7 +356,12 @@ A: Correct. This script maps `Ctrl+Y` to paste (Emacs yank), which overrides Win
 **方式 1：注册表方式（强烈推荐）**
 - **优点：** 零延迟、无状态同步问题、完全消除 Win 键卡住风险
 - **缺点：** 需要管理员权限、需重启系统
-- **操作步骤：**
+- **操作步骤（方式 A - 使用提供的 .reg 文件）：**
+  1. 双击 **`swap-win-alt.reg`** 应用 Win/Alt 互换
+  2. 重启电脑
+  3. AHK 脚本保持不变（不要取消注释第 82-91 行）
+  4. （如需还原：双击 **`restore-keyboard.reg`** 并重启）
+- **操作步骤（方式 B - 使用 SharpKeys 图形界面）：**
   1. 下载 **[SharpKeys](https://github.com/randyrants/sharpkeys)**（免费开源工具）
   2. 配置映射：
      - Left Windows → Left Alt
