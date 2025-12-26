@@ -20,7 +20,6 @@ This project provides an optimized AutoHotkey v2 script to emulate macOS keybind
 - ✅ Full Mac-style system shortcuts (Command+C/V/Q...)
 - ✅ Complete Emacs navigation (Ctrl+P/N/B/F/A/E/K/U...)
 - ✅ Optional Win/Alt key swap for HHKB keyboards
-- ✅ IntelliJ IDEA mouse navigation (Command+Click)
 - ✅ Option key support (word jump, word delete)
 - ✅ Performance optimized (zero delay key processing)
 - ✅ Smart input method switching
@@ -30,7 +29,7 @@ This project provides an optimized AutoHotkey v2 script to emulate macOS keybind
 
 | Script Name | Version | Best For | Description |
 | --- | --- | --- | --- |
-| **`mac-style-keybindings.ahk`** | **v3.0** | **Mac/HHKB Users** | **⭐ Recommended.** Mac shortcuts (Alt+C/V/Z...) + Emacs navigation (Ctrl+P/N...).<br><br>• Uses **Alt** key as Mac Command (Alt+C to copy)<br>• Optional Win/Alt swap for HHKB DIP SW 2<br>• Full Emacs-style cursor movement<br>• Option key support (word jump/delete)<br>• IntelliJ IDEA integration |
+| **`mac-style-keybindings.ahk`** | **v3.0** | **Mac/HHKB Users** | **⭐ Recommended.** Mac shortcuts (Alt+C/V/Z...) + Emacs navigation (Ctrl+P/N...).<br><br>• Uses **Alt** key as Mac Command (Alt+C to copy)<br>• Optional Win/Alt swap for HHKB DIP SW 2<br>• Full Emacs-style cursor movement<br>• Option key support (word jump/delete) |
 | **`gtk-emacs-theme-like-v2.ahk`** | v2.0 | **Pure Emacs Users** | Only Emacs navigation, no Mac shortcuts.<br><br>• Pure Emacs keybindings (Ctrl+P/N/B/F...)<br>• No Mac-style system shortcuts<br>• Win/Alt swap available via uncommenting |
 | `gtk-emacs-theme-like.ahk` | v1.0 | Legacy Users | Old version for AutoHotkey v1 (not recommended) |
 
@@ -201,7 +200,6 @@ Compared to v2.0:
 - ✅ **Performance boost**: Added `SetKeyDelay 0` and `SetMouseDelay -1` for zero-delay key processing
 - ✅ **Option key support**: Added `Win+Backspace/Delete` for word deletion (Mac Option+Delete behavior)
 - ✅ **Input method fix**: Added `Ctrl+Space` → `Win+Space` mapping for modern Windows input method
-- ✅ **IDEA integration**: Added `Alt+Click` mouse navigation for IntelliJ IDEA (default config)
 - ✅ **Start menu prevention**: Added `A_MenuMaskKey := "vkFF"` to prevent accidental Start menu popup
 - ✅ **Better comments**: Enhanced documentation with Emacs term explanations
 - ✅ **Script notification**: Shows tray tip when script loads
@@ -255,7 +253,6 @@ A: Correct. This script maps `Ctrl+Y` to paste (Emacs yank), which overrides Win
 - ✅ 完整的 Mac 风格系统快捷键（Command+C/V/Q...）
 - ✅ 完整的 Emacs 导航（Ctrl+P/N/B/F/A/E/K/U...）
 - ✅ 可选的 Win/Alt 键位互换（适配 HHKB 键盘）
-- ✅ IntelliJ IDEA 鼠标导航（Command+单击）
 - ✅ Option 键支持（按单词跳转、删除）
 - ✅ 性能优化（零延迟按键处理）
 - ✅ 智能输入法切换
@@ -265,7 +262,7 @@ A: Correct. This script maps `Ctrl+Y` to paste (Emacs yank), which overrides Win
 
 | 脚本文件 | 版本 | 适用人群 | 功能描述 |
 | --- | --- | --- | --- |
-| **`mac-style-keybindings.ahk`** | **v3.0** | **Mac/HHKB 用户** | **⭐ 强烈推荐。** Mac 快捷键 (Alt+C/V/Z...) + Emacs 导航 (Ctrl+P/N...)<br><br>• 使用 **Alt** 键作为 Mac Command（Alt+C 复制）<br>• 可选的 Win/Alt 互换（适配 HHKB DIP SW 2）<br>• 完整的 Emacs 风格光标移动<br>• Option 键支持（按单词跳转/删除）<br>• IntelliJ IDEA 集成 |
+| **`mac-style-keybindings.ahk`** | **v3.0** | **Mac/HHKB 用户** | **⭐ 强烈推荐。** Mac 快捷键 (Alt+C/V/Z...) + Emacs 导航 (Ctrl+P/N...)<br><br>• 使用 **Alt** 键作为 Mac Command（Alt+C 复制）<br>• 可选的 Win/Alt 互换（适配 HHKB DIP SW 2）<br>• 完整的 Emacs 风格光标移动<br>• Option 键支持（按单词跳转/删除） |
 | **`gtk-emacs-theme-like-v2.ahk`** | v2.0 | **纯 Emacs 键位用户** | 仅 Emacs 导航，无 Mac 快捷键<br><br>• 纯 Emacs 键位绑定 (Ctrl+P/N/B/F...)<br>• 不包含 Mac 风格系统快捷键<br>• 可通过取消注释启用 Win/Alt 互换 |
 | `gtk-emacs-theme-like.ahk` | v1.0 | AHK v1 用户 | AutoHotkey v1 旧版代码（不推荐） |
 
