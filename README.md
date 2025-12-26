@@ -20,7 +20,7 @@ This project provides an optimized AutoHotkey v2 script to emulate macOS keybind
 - ✅ Full Mac-style system shortcuts (Command+C/V/Q...)
 - ✅ Complete Emacs navigation (Ctrl+P/N/B/F/A/E/K/U...)
 - ✅ Optional Win/Alt key swap for HHKB keyboards
-- ✅ Option key support (word jump, word delete)
+- ✅ Shift+Ctrl conflict resolution for IDE shortcuts
 - ✅ Performance optimized (zero delay key processing)
 - ✅ Smart input method switching
 - ✅ Intelligent app exclusion list
@@ -29,7 +29,7 @@ This project provides an optimized AutoHotkey v2 script to emulate macOS keybind
 
 | Script Name | Version | Best For | Description |
 | --- | --- | --- | --- |
-| **`mac-style-keybindings.ahk`** | **v3.0** | **Mac/HHKB Users** | **⭐ Recommended.** Mac shortcuts (Alt+C/V/Z...) + Emacs navigation (Ctrl+P/N...).<br><br>• Uses **Alt** key as Mac Command (Alt+C to copy)<br>• Optional Win/Alt swap for HHKB DIP SW 2<br>• Full Emacs-style cursor movement<br>• Option key support (word jump/delete) |
+| **`mac-style-keybindings.ahk`** | **v3.0** | **Mac/HHKB Users** | **⭐ Recommended.** Mac shortcuts (Alt+C/V/Z...) + Emacs navigation (Ctrl+P/N...).<br><br>• Uses **Alt** key as Mac Command (Alt+C to copy)<br>• Optional Win/Alt swap for HHKB DIP SW 2<br>• Full Emacs-style cursor movement<br>• Shift+Ctrl conflict resolution for IDEs |
 | **`gtk-emacs-theme-like-v2.ahk`** | v2.0 | **Pure Emacs Users** | Only Emacs navigation, no Mac shortcuts.<br><br>• Pure Emacs keybindings (Ctrl+P/N/B/F...)<br>• No Mac-style system shortcuts<br>• Win/Alt swap available via uncommenting |
 | `gtk-emacs-theme-like.ahk` | v1.0 | Legacy Users | Old version for AutoHotkey v1 (not recommended) |
 
@@ -62,8 +62,13 @@ This project provides an optimized AutoHotkey v2 script to emulate macOS keybind
 | `Alt + N` | New Window | ⌘N |
 | `Alt + R` | Refresh | ⌘R |
 | `Alt + Q` | Quit Application | ⌘Q |
-| `Alt + ←/→` | Home/End (Line Start/End) | ⌘← / ⌘→ |
-| `Alt + ↑/↓` | Document Start/End | ⌘↑ / ⌘↓ |
+
+**Note on Shift combinations:** For shortcuts that conflict with Emacs navigation (like `Ctrl+Shift+F` for global search), use the Alt+Shift combination instead:
+- `Alt + Shift + F` → `Ctrl + Shift + F` (Global Find/Search in Files)
+- `Alt + Shift + B` → `Ctrl + Shift + B` (Build/Bookmarks)
+- `Alt + Shift + A` → `Ctrl + Shift + A` (Find Action in IDEs)
+
+These mappings are necessary because `Ctrl+F`, `Ctrl+B`, and `Ctrl+A` are remapped to Emacs navigation keys.
 
 #### 2. Emacs Navigation
 
@@ -87,7 +92,7 @@ This project provides an optimized AutoHotkey v2 script to emulate macOS keybind
 | `Ctrl + \` | Select all | C-\ |
 | `Ctrl + Space` | Switch input method | - |
 
-**Note:** All cursor movement shortcuts support `Shift` modifier for text selection (e.g., `Shift+Ctrl+P` selects text upward).
+**Note:** All cursor movement shortcuts support `Shift` modifier for text selection (e.g., `Shift+Ctrl+P` selects text upward). These work automatically without explicit mapping.
 
 #### 3. Option Key Functions (Word Operations)
 
@@ -154,7 +159,7 @@ RAlt::RWin
 - **Can't modify registry:** Use Method 2 (AHK)
 - **Testing/temporary use:** Use Method 2 (AHK)
 
-#### Admin Mode (Lines 18-25)
+#### Admin Mode (Lines 18-24)
 Uncomment to run as Administrator (fixes issues in Task Manager/Registry/Games):
 ```ahk
 if not A_IsAdmin
@@ -167,13 +172,24 @@ if not A_IsAdmin
 }
 ```
 
-#### Input Method Switching (Lines 147-153)
+#### Input Method Switching (Lines 143-149)
 Choose one option based on your input method (Option 2 is the default):
 - **Option 1:** Windows 10/11 modern input method - maps `Ctrl+Space` to `Win+Space` (uncomment line 148 to enable)
 - **Option 2 (Default):** Legacy input method - keeps `Ctrl+Space` unchanged (no modification needed)
 - **Option 3:** Disable input method switching completely (uncomment line 153)
 
-#### Natural Scrolling (Lines 216-217)
+#### Mac-Style Navigation (Lines 176-183, 186-193) - Optional
+These sections are commented out by default to prevent conflicts with IDE shortcuts (like `Ctrl+Alt+Right` for navigation in IntelliJ IDEA).
+
+**Section 6: Mac Command + Arrow Keys**
+- Uncomment if you want Mac-style document navigation (`Alt+Up/Down/Left/Right`)
+- Warning: May interfere with IDE shortcuts like `Ctrl+Alt+Left/Right`
+
+**Section 7: Option Key Functions**
+- Uncomment if you want word-level navigation (`Win+Left/Right` for word jump, `Win+Backspace/Delete` for word deletion)
+- Warning: May cause Win key stuck issues; use registry-based Win/Alt swap if enabling
+
+#### Natural Scrolling (Lines 199-200)
 Uncomment to reverse mouse wheel direction (Mac style):
 ```ahk
 WheelUp::WheelDown
@@ -198,12 +214,13 @@ To exclude an app, uncomment the relevant line in section `1. Application Groupi
 
 Compared to v2.0:
 - ✅ **Performance boost**: Added `SetKeyDelay 0` and `SetMouseDelay -1` for zero-delay key processing
-- ✅ **Option key support**: Added `Win+Backspace/Delete` for word deletion (Mac Option+Delete behavior)
+- ✅ **IDE conflict resolution**: Added explicit `Alt+Shift+F/B/A` mappings to resolve conflicts with Emacs navigation in IDEs
 - ✅ **Input method fix**: Added `Ctrl+Space` → `Win+Space` mapping for modern Windows input method
 - ✅ **Start menu prevention**: Added `A_MenuMaskKey := "vkFF"` to prevent accidental Start menu popup
 - ✅ **Better comments**: Enhanced documentation with Emacs term explanations
 - ✅ **Script notification**: Shows tray tip when script loads
 - ✅ **Kill-line fix**: `Ctrl+K` now uses cut (`^x`) instead of delete to match Emacs kill-ring semantics
+- ✅ **Optional features**: Mac navigation and Option key features now commented out by default to avoid conflicts
 
 ### Troubleshooting
 
@@ -217,9 +234,8 @@ A: This is caused by the Win key getting stuck in pressed state. **Why it happen
 **Solutions:**
 1. **Immediate fix:** Press and release the Win key manually
 2. **Reload script:** Right-click tray icon → Reload This Script
-3. **Permanent fix (v3.0+):** The script now includes Win key release handlers (lines 35-36) to prevent this issue
-4. **Root cause fix (Recommended):** If you need Win/Alt swap, use **registry-based swap** instead of AHK (see "Win/Alt Physical Swap" section). This completely eliminates the stuck key problem at the driver level.
-5. **Disable Option key features:** If you don't need word-level operations, comment out lines 202-209 (`#Left`, `#Right`, `#BS`, `#Del`)
+3. **Root cause fix (Recommended):** If you need Win/Alt swap, use **registry-based swap** instead of AHK (see "Win/Alt Physical Swap" section). This completely eliminates the stuck key problem at the driver level.
+4. **Disable Option key features:** Section 7 (lines 186-193) is commented out by default. Only enable if needed.
 
 **Prevention tips:**
 - Don't press Win+key combinations too rapidly
@@ -253,7 +269,7 @@ A: Correct. This script maps `Ctrl+Y` to paste (Emacs yank), which overrides Win
 - ✅ 完整的 Mac 风格系统快捷键（Command+C/V/Q...）
 - ✅ 完整的 Emacs 导航（Ctrl+P/N/B/F/A/E/K/U...）
 - ✅ 可选的 Win/Alt 键位互换（适配 HHKB 键盘）
-- ✅ Option 键支持（按单词跳转、删除）
+- ✅ Shift+Ctrl 冲突解决方案（适配 IDE 快捷键）
 - ✅ 性能优化（零延迟按键处理）
 - ✅ 智能输入法切换
 - ✅ 智能应用排除列表
@@ -262,7 +278,7 @@ A: Correct. This script maps `Ctrl+Y` to paste (Emacs yank), which overrides Win
 
 | 脚本文件 | 版本 | 适用人群 | 功能描述 |
 | --- | --- | --- | --- |
-| **`mac-style-keybindings.ahk`** | **v3.0** | **Mac/HHKB 用户** | **⭐ 强烈推荐。** Mac 快捷键 (Alt+C/V/Z...) + Emacs 导航 (Ctrl+P/N...)<br><br>• 使用 **Alt** 键作为 Mac Command（Alt+C 复制）<br>• 可选的 Win/Alt 互换（适配 HHKB DIP SW 2）<br>• 完整的 Emacs 风格光标移动<br>• Option 键支持（按单词跳转/删除） |
+| **`mac-style-keybindings.ahk`** | **v3.0** | **Mac/HHKB 用户** | **⭐ 强烈推荐。** Mac 快捷键 (Alt+C/V/Z...) + Emacs 导航 (Ctrl+P/N...)<br><br>• 使用 **Alt** 键作为 Mac Command（Alt+C 复制）<br>• 可选的 Win/Alt 互换（适配 HHKB DIP SW 2）<br>• 完整的 Emacs 风格光标移动<br>• Shift+Ctrl 冲突解决方案（适配 IDE） |
 | **`gtk-emacs-theme-like-v2.ahk`** | v2.0 | **纯 Emacs 键位用户** | 仅 Emacs 导航，无 Mac 快捷键<br><br>• 纯 Emacs 键位绑定 (Ctrl+P/N/B/F...)<br>• 不包含 Mac 风格系统快捷键<br>• 可通过取消注释启用 Win/Alt 互换 |
 | `gtk-emacs-theme-like.ahk` | v1.0 | AHK v1 用户 | AutoHotkey v1 旧版代码（不推荐） |
 
@@ -295,8 +311,13 @@ A: Correct. This script maps `Ctrl+Y` to paste (Emacs yank), which overrides Win
 | `Alt + N` | 新建窗口 | ⌘N |
 | `Alt + R` | 刷新 | ⌘R |
 | `Alt + Q` | 退出程序 | ⌘Q |
-| `Alt + ←/→` | 跳转到行首/行尾 | ⌘← / ⌘→ |
-| `Alt + ↑/↓` | 跳转到文首/文末 | ⌘↑ / ⌘↓ |
+
+**关于 Shift 组合键的说明：** 对于与 Emacs 导航冲突的快捷键(如全局搜索的`Ctrl+Shift+F`),请使用 Alt+Shift 组合:
+- `Alt + Shift + F` → `Ctrl + Shift + F` (全局查找/在文件中搜索)
+- `Alt + Shift + B` → `Ctrl + Shift + B` (构建/书签)
+- `Alt + Shift + A` → `Ctrl + Shift + A` (在 IDE 中查找操作)
+
+这些映射是必需的,因为 `Ctrl+F`、`Ctrl+B` 和 `Ctrl+A` 已被重新映射为 Emacs 导航键。
 
 #### 2. Emacs 风格导航
 
@@ -320,16 +341,15 @@ A: Correct. This script maps `Ctrl+Y` to paste (Emacs yank), which overrides Win
 | `Ctrl + \` | 全选 | C-\ |
 | `Ctrl + Space` | 切换输入法 | - |
 
-**注意：** 所有光标移动快捷键均支持 `Shift` 修饰键进行文本选择（如 `Shift+Ctrl+P` 向上选中文本）。
+**注意：** 所有光标移动快捷键均支持 `Shift` 修饰键进行文本选择（如 `Shift+Ctrl+P` 向上选中文本）。这些功能自动生效，无需显式映射。
 
-#### 3. Option 键功能（单词操作）
+#### 3. Option 键功能（单词操作）- 可选
 
-*默认使用 **Win** 键（启用互换后使用 **Alt** 键）。*
+*默认使用 **Win** 键（启用互换后使用 **Alt** 键）。此功能默认已注释，如需使用请在脚本中取消注释。*
 
 | 快捷键 | 功能 | 对应 Mac |
 | --- | --- | --- |
 | `Win + ←/→` | 按单词左移/右移 | ⌥← / ⌥→ |
-| `Shift + Win + ←/→` | 选中单词左移/右移 | ⇧⌥← / ⇧⌥→ |
 | `Win + Backspace` | 删除前一个单词 | ⌥⌫ |
 | `Win + Delete` | 删除后一个单词 | ⌥⌦ |
 
@@ -400,13 +420,24 @@ if not A_IsAdmin
 }
 ```
 
-#### 输入法切换（第 147-153 行）
+#### 输入法切换（第 139-145 行）
 根据你的输入法选择一个选项（默认为选项 2）：
-- **选项 1：** Windows 10/11 现代输入法 - 将 `Ctrl+Space` 映射为 `Win+Space`（取消第 148 行注释以启用）
+- **选项 1：** Windows 10/11 现代输入法 - 将 `Ctrl+Space` 映射为 `Win+Space`（取消第 140 行注释以启用）
 - **选项 2（默认）：** 旧版输入法 - 保持 `Ctrl+Space` 不变（无需修改）
-- **选项 3：** 完全禁用输入法切换（取消第 153 行注释）
+- **选项 3：** 完全禁用输入法切换（取消第 145 行注释）
 
-#### 鼠标自然滚动（第 216-217 行）
+#### Mac 风格导航（第 176-183, 186-193 行）- 可选
+这些部分默认已注释，以防止与 IDE 快捷键冲突（如 IntelliJ IDEA 中的 `Ctrl+Alt+Right` 导航）。
+
+**第 6 节：Mac Command + 方向键**
+- 如需 Mac 风格文档导航（`Alt+Up/Down/Left/Right`），请取消注释
+- 警告：可能与 IDE 快捷键冲突，如 `Ctrl+Alt+Left/Right`
+
+**第 7 节：Option 键功能**
+- 如需按单词级导航（`Win+Left/Right` 单词跳转，`Win+Backspace/Delete` 按单词删除），请取消注释
+- 警告：可能导致 Win 键卡住问题；如启用，建议使用注册表方式进行 Win/Alt 互换
+
+#### 鼠标自然滚动（第 199-200 行）
 取消注释以反转鼠标滚轮方向（Mac 风格）：
 ```ahk
 WheelUp::WheelDown
@@ -431,13 +462,13 @@ WheelDown::WheelUp
 
 相比 v2.0：
 - ✅ **性能提升**：添加 `SetKeyDelay 0` 和 `SetMouseDelay -1` 实现零延迟按键处理
-- ✅ **Option 键支持**：添加 `Win+Backspace/Delete` 按单词删除（Mac Option+Delete 行为）
+- ✅ **IDE 冲突解决**：添加显式的 `Alt+Shift+F/B/A` 映射，解决与 Emacs 导航在 IDE 中的冲突
 - ✅ **输入法修复**：添加 `Ctrl+Space` → `Win+Space` 映射以适配现代 Windows 输入法
-- ✅ **IDEA 集成**：添加 `Alt+单击` 鼠标导航支持 IntelliJ IDEA（默认配置）
 - ✅ **开始菜单防护**：添加 `A_MenuMaskKey := "vkFF"` 防止意外弹出开始菜单
 - ✅ **注释增强**：增强文档注释，添加 Emacs 术语解释
 - ✅ **脚本通知**：脚本加载时显示托盘提示
 - ✅ **Kill-line 修复**：`Ctrl+K` 现在使用剪切（`^x`）而非删除，符合 Emacs kill-ring 语义
+- ✅ **可选功能**：Mac 导航和 Option 键功能现默认注释，避免冲突
 
 ### 常见问题
 
@@ -451,9 +482,8 @@ A: 这是 Win 键卡在按下状态导致的。**发生原因：**
 **解决方案：**
 1. **立即修复：** 手动按下并释放 Win 键
 2. **重新加载脚本：** 右键托盘图标 → 重新加载脚本
-3. **永久修复（v3.0+）：** 脚本已内置 Win 键释放处理器（第 35-36 行）来防止此问题
-4. **根本解决（强烈推荐）：** 如果需要 Win/Alt 互换，使用**注册表方式**而非 AHK（见"Win/Alt 物理互换"章节）。这能在驱动层面彻底消除键位卡住问题。
-5. **禁用 Option 键功能：** 如果不需要按单词操作，注释掉第 202-209 行（`#Left`、`#Right`、`#BS`、`#Del`）
+3. **根本解决（强烈推荐）：** 如果需要 Win/Alt 互换，使用**注册表方式**而非 AHK（见"Win/Alt 物理互换"章节）。这能在驱动层面彻底消除键位卡住问题。
+4. **禁用 Option 键功能：** 第 7 节（第 186-193 行）默认已注释。仅在需要时启用。
 
 **预防建议：**
 - 不要过快连按 Win+键 组合

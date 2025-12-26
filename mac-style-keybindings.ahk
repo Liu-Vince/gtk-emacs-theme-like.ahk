@@ -13,7 +13,7 @@ SetKeyDelay 0, 0      ; 按键发送无延迟（按键间隔, 按键时长）
 SetControlDelay -1    ; 控件操作无延迟
 SetMouseDelay -1      ; 鼠标操作无延迟
 
-; [核心] 自动以管理员身份运行
+; [核心] 自动以管理员身份运行  (可选)
 ; 如果不加这段，脚本在任务管理器、注册表或某些游戏中会失效
 ; if not A_IsAdmin
 ; {
@@ -103,17 +103,9 @@ GroupAdd "NativeNav", "ahk_exe emacs.exe"                  ; 真 Emacs
 ^b::Left      ; Ctrl+B -> 左 (Backward char)
 ^f::Right     ; Ctrl+F -> 右 (Forward char)
 
-; --- 选中移动 (Shift+Ctrl+P/N/B/F) ---
-+^p::+Up      ; 向上选中
-+^n::+Down    ; 向下选中
-+^b::+Left    ; 向左选中
-+^f::+Right   ; 向右选中
-
 ; --- 行首行尾 (Ctrl+A/E) ---
 ^a::Home      ; Ctrl+A -> 行首 (beginning of line)
 ^e::End       ; Ctrl+E -> 行尾 (end of line)
-+^a::+Home    ; Shift+Ctrl+A -> 选中到行首
-+^e::+End     ; Shift+Ctrl+E -> 选中到行尾
 
 ; --- 删除操作 (Ctrl+D/H) ---
 ^d::Del       ; Ctrl+D -> 删除光标后字符 (Delete char)
@@ -171,42 +163,37 @@ GroupAdd "NativeNav", "ahk_exe emacs.exe"                  ; 真 Emacs
 !q::!F4       ; Alt+Q -> 退出应用 (Command+Q)
 !r::^r        ; Alt+R -> 刷新 (Command+R)
 !a::^a        ; Alt+A -> 全选 (Command+A)
+!+a::^+a      ; Alt+Shift+A -> Ctrl+Shift+A (与 ^a 冲突，需显式映射)
 
 ; --- 解决冲突：保留原生 Ctrl+F / Ctrl+B ---
 ; 因为 Emacs 导航占用了 ^f 和 ^b，这里提供 Alt+F/B 作为查找/加粗的替代
 !f::SendInput "{Ctrl down}f{Ctrl up}"  ; Alt+F -> 查找 (Command+F)
+!+f::^+f      ; Alt+Shift+F -> Ctrl+Shift+F (与 ^f 冲突，需显式映射)
 !b::SendInput "{Ctrl down}b{Ctrl up}"  ; Alt+B -> 加粗 (Command+B，部分应用)
+!+b::^+b      ; Alt+Shift+B -> Ctrl+Shift+B (与 ^b 冲突，需显式映射)
 
 ; ==============================================================================
-; 6. Mac 风格光标跳转 (Command + 方向键)
+; 6. Mac 风格光标跳转 (Command + 方向键) (可选)
 ; ==============================================================================
 ; 这些快捷键模拟 Mac 的 Command+方向键行为
 
-!Up::Send "^{Home}"       ; Alt+Up -> 跳转到文档开头
-!Down::Send "^{End}"      ; Alt+Down -> 跳转到文档结尾
-!Left::Home               ; Alt+Left -> 跳转到行首
-!Right::End               ; Alt+Right -> 跳转到行尾
-
-; 带 Shift 的选中版本
-+!Up::Send "+^{Home}"     ; Shift+Alt+Up -> 选中到文档开头
-+!Down::Send "+^{End}"    ; Shift+Alt+Down -> 选中到文档结尾
-+!Left::+Home             ; Shift+Alt+Left -> 选中到行首
-+!Right::+End             ; Shift+Alt+Right -> 选中到行尾
+; !Up::Send "^{Home}"       ; Alt+Up -> 跳转到文档开头
+; !Down::Send "^{End}"      ; Alt+Down -> 跳转到文档结尾
+; !Left::Home               ; Alt+Left -> 跳转到行首
+; !Right::End               ; Alt+Right -> 跳转到行尾
 
 ; ==============================================================================
-; 7. Option 键功能 (按单词移动/删除)
+; 7. Option 键功能 (按单词移动/删除) (可选)
 ; ==============================================================================
 ; # 代表逻辑 Win 键（如果启用了 Win/Alt 互换，则物理 Alt 键变成逻辑 Win）
 
 ; --- Option + 方向键 (按单词移动) ---
-#Left::^Left              ; Win+Left -> 向左移动一个单词 (Option+Left)
-#Right::^Right            ; Win+Right -> 向右移动一个单词 (Option+Right)
-+#Left::+^Left            ; Shift+Win+Left -> 向左选中一个单词
-+#Right::+^Right          ; Shift+Win+Right -> 向右选中一个单词
+; #Left::^Left              ; Win+Left -> 向左移动一个单词 (Option+Left)
+; #Right::^Right            ; Win+Right -> 向右移动一个单词 (Option+Right)
 
 ; --- Option + Backspace/Delete (按单词删除) ---
-#BS::^BS                  ; Win+Backspace -> 删除前一个单词 (Option+Backspace)
-#Del::^Del                ; Win+Delete -> 删除后一个单词 (Option+Delete)
+; #BS::^BS                  ; Win+Backspace -> 删除前一个单词 (Option+Backspace)
+; #Del::^Del                ; Win+Delete -> 删除后一个单词 (Option+Delete)
 
 ; ==============================================================================
 ; 8. 鼠标自然滚动 (可选)
