@@ -27,9 +27,15 @@ SetMouseDelay -1      ; 鼠标操作无延迟
 ; 提高进程优先级，确保高负载下按键不延迟
 ProcessSetPriority "High"
 
-; [防止开始菜单意外弹出]
+; [防止开始菜单意外弹出 + Win 键卡住修复]
 ; 当我们使用 Win 键相关映射时，防止 AHK 发送的掩码按键触发开始菜单
 A_MenuMaskKey := "vkFF"
+
+; 修复 Win 键卡住问题：显式处理 Win 键释放事件
+; 注意：仅在使用 AHK 层 Win 键映射时有效（如 #Left、#BS 或 AHK 方式互换）
+;       如果使用注册表方式互换 Win/Alt，这两行可以删除（无害但无用）
+~LWin Up::Send "{Blind}{vk07}"  ; 左 Win 键释放时发送虚拟键码重置状态
+~RWin Up::Send "{Blind}{vk07}"  ; 右 Win 键释放时发送虚拟键码重置状态
 
 ; ==============================================================================
 ; 1. 应用程序分组 (排除列表)
@@ -60,8 +66,19 @@ GroupAdd "NativeNav", "ahk_exe emacs.exe"                  ; 真 Emacs
 ; ==============================================================================
 ; 2. 全局 Win/Alt 物理互换 (HHKB DIP2 适配 - 可选)
 ; ==============================================================================
-; 如果你的 HHKB 键盘开启了 DIP SW 2（硬件层面互换了 Win/Alt），取消下面的注释
-; 这样可以让脚本逻辑适配硬件互换后的键位
+; ⚠️ 重要建议：推荐使用【注册表方式】交换 Win/Alt 键，而非 AHK 方式
+;
+; 【推荐】注册表方式（驱动层交换）：
+;   优势：零延迟、无状态同步问题、完全消除 Win 键卡住风险
+;   工具：SharpKeys (https://github.com/randyrants/sharpkeys)
+;   配置：Left Windows → Left Alt, Left Alt → Left Windows
+;         Right Windows → Right Alt, Right Alt → Right Windows
+;   重启后生效，无需 AHK 参与
+;
+; 【备选】AHK 方式（应用层拦截）：
+;   如果你无法修改注册表（如公司电脑），可以使用 AHK 方式
+;   缺点：可能出现 Win 键卡住问题（虽然脚本已添加释放处理器缓解）
+;   如需启用，取消下面的注释：
 
 ; 物理 Win -> 逻辑 Alt (Command)
 ; LWin::LAlt
@@ -76,23 +93,7 @@ GroupAdd "NativeNav", "ahk_exe emacs.exe"                  ; 真 Emacs
 ; ~RAlt Up::Send "{Blind}{vkE8}"
 
 ; ==============================================================================
-; 3. IntelliJ IDEA 专属增强
-; ==============================================================================
-#HotIf WinActive("ahk_exe idea64.exe")
-
-; [鼠标跳转定义] Mac 风格 Command+Click -> Windows Ctrl+Click
-; 注意：默认使用 Alt 键（与 Mac 快捷键保持一致）
-; 如果你启用了 Win/Alt 互换（第 67-72 行），请改为 #LButton
-; 当前配置：未启用互换，使用 Alt 键触发（与 Alt+C/V/Z 等保持一致）
-!LButton::^LButton
-
-; 如果你启用了 Win/Alt 互换（第 67-72 行），请注释掉上面一行，启用下面这行：
-; #LButton::^LButton
-
-#HotIf ; 结束 IDEA 专属区
-
-; ==============================================================================
-; 4. Emacs 风格光标移动 (仅在非排除列表程序中生效)
+; 3. Emacs 风格光标移动 (仅在非排除列表程序中生效)
 ; ==============================================================================
 #HotIf !WinActive("ahk_group NativeNav")
 
@@ -143,13 +144,12 @@ GroupAdd "NativeNav", "ahk_exe emacs.exe"                  ; 真 Emacs
 ; Ctrl+Space 在 Emacs 中是设置标记，但在 Windows 中被输入法拦截
 ; 根据你的输入法设置选择其中一个：
 
-; 选项 1: Windows 10/11 默认输入法切换 (Win+Space)
-^Space::#Space
+; 选项 1: Windows 10/11 现代输入法 - 映射为 Win+Space（默认不启用，如需使用取消下面的注释）
+; ^Space::#Space
 
-; 选项 2: 旧版输入法 (Ctrl+Space)，如果使用请注释掉上面一行，启用下面这行：
-; ^Space::Send "^{Space}"
+; 选项 2: 旧版输入法 - 保持 Ctrl+Space 不变（默认配置，无需修改）
 
-; 选项 3: 完全禁用 Ctrl+Space（如果你不需要切换输入法）
+; 选项 3: 完全禁用 Ctrl+Space 输入法切换，如需使用启用下面这行：
 ; ^Space::Return
 
 ; ==============================================================================

@@ -101,16 +101,6 @@ This project provides an optimized AutoHotkey v2 script to emulate macOS keybind
 | `Win + Backspace` | Delete previous word | ⌥⌫ |
 | `Win + Delete` | Delete next word | ⌥⌦ |
 
-#### 4. IntelliJ IDEA Integration
-
-*Only in IntelliJ IDEA (`idea64.exe`).*
-
-| Shortcut | Function | Mac Equivalent |
-| --- | --- | --- |
-| `Alt + Click` | Go to definition | ⌘ + Click |
-
-**Note:** If you enable Win/Alt swap (Lines 67-72), use `Win + Click` instead.
-
 ### Customization
 
 Open `mac-style-keybindings.ahk` with a text editor to toggle optional features:
@@ -122,8 +112,30 @@ Already enabled by default:
 - `SetControlDelay -1` - No delay for control operations
 - `SetMouseDelay -1` - No delay for mouse operations
 
-#### Win/Alt Physical Swap (Lines 67-76) - For HHKB Users
-Uncomment to swap Win and Alt keys physically:
+#### Win/Alt Physical Swap (Lines 67-91) - For HHKB Users
+
+**⚠️ Recommendation: Use Registry-Based Key Swap (Preferred)**
+
+The script supports two methods for swapping Win and Alt keys:
+
+**Method 1: Registry-Based Swap (Recommended)**
+- **Pros:** Zero latency, no state sync issues, completely eliminates Win key stuck problem
+- **Cons:** Requires admin rights, system restart needed
+- **How to:**
+  1. Download **[SharpKeys](https://github.com/randyrants/sharpkeys)** (free, open-source)
+  2. Configure mappings:
+     - Left Windows → Left Alt
+     - Left Alt → Left Windows
+     - Right Windows → Right Alt
+     - Right Alt → Right Windows
+  3. Click "Write to Registry" and restart
+  4. Keep the AHK script as-is (don't uncomment lines 82-91)
+
+**Method 2: AHK-Based Swap (Fallback)**
+- **Pros:** No admin rights needed, no restart, easy to toggle
+- **Cons:** May cause Win key to get stuck occasionally (mitigated by release handlers in lines 35-36)
+- **How to:** Uncomment lines 82-91 in the script
+
 ```ahk
 LWin::LAlt
 RWin::RAlt
@@ -132,7 +144,11 @@ RAlt::RWin
 ~LAlt Up::Send "{Blind}{vkE8}"
 ~RAlt Up::Send "{Blind}{vkE8}"
 ```
-**Why use this?** If your HHKB has DIP SW 2=ON (hardware Win/Alt swap), enable this to make the script logic match your keyboard layout.
+
+**Which method to choose?**
+- **HHKB users with DIP SW 2=ON:** Use Method 1 (Registry) for best results
+- **Can't modify registry:** Use Method 2 (AHK)
+- **Testing/temporary use:** Use Method 2 (AHK)
 
 #### Admin Mode (Lines 18-25)
 Uncomment to run as Administrator (fixes issues in Task Manager/Registry/Games):
@@ -148,10 +164,10 @@ if not A_IsAdmin
 ```
 
 #### Input Method Switching (Lines 147-153)
-Choose one option based on your input method (Option 1 is enabled by default):
-- **Option 1 (Enabled by default):** Windows 10/11 modern input method - maps `Ctrl+Space` to `Win+Space`
-- **Option 2:** Legacy input method - keeps `Ctrl+Space` as `Ctrl+Space`
-- **Option 3:** Disable input method switching completely
+Choose one option based on your input method (Option 2 is the default):
+- **Option 1:** Windows 10/11 modern input method - maps `Ctrl+Space` to `Win+Space` (uncomment line 148 to enable)
+- **Option 2 (Default):** Legacy input method - keeps `Ctrl+Space` unchanged (no modification needed)
+- **Option 3:** Disable input method switching completely (uncomment line 153)
 
 #### Natural Scrolling (Lines 216-217)
 Uncomment to reverse mouse wheel direction (Mac style):
@@ -188,11 +204,24 @@ Compared to v2.0:
 
 ### Troubleshooting
 
-**Q: Keys feel stuck or misbehaving (e.g., pressing F triggers Feedback Hub)?**
-A: This is caused by Win key getting stuck. Solutions:
-1. Reload the script (right-click tray icon → Reload)
-2. Press and release Win key manually
-3. For permanent fix: Use registry-based key remapping instead of AHK for Win/Alt swap (see [HHKB script discussion](https://github.com))
+**Q: Keys feel stuck or misbehaving (e.g., pressing Backspace deletes a whole word, or pressing F triggers Feedback Hub)?**
+
+A: This is caused by the Win key getting stuck in pressed state. **Why it happens:**
+- AutoHotkey intercepts Win key for mappings like `Win+Left` → `Ctrl+Left`
+- Sometimes the key release event gets lost (high CPU load, rapid key presses)
+- Windows thinks Win is still pressed, so all subsequent keys become `Win+Key`
+
+**Solutions:**
+1. **Immediate fix:** Press and release the Win key manually
+2. **Reload script:** Right-click tray icon → Reload This Script
+3. **Permanent fix (v3.0+):** The script now includes Win key release handlers (lines 35-36) to prevent this issue
+4. **Root cause fix (Recommended):** If you need Win/Alt swap, use **registry-based swap** instead of AHK (see "Win/Alt Physical Swap" section). This completely eliminates the stuck key problem at the driver level.
+5. **Disable Option key features:** If you don't need word-level operations, comment out lines 202-209 (`#Left`, `#Right`, `#BS`, `#Del`)
+
+**Prevention tips:**
+- Don't press Win+key combinations too rapidly
+- **Best solution:** Use registry-based Win/Alt swap (Method 1 in customization section)
+- The script's High priority setting helps reduce this issue
 
 **Q: Script doesn't work in some apps?**
 A: Check if the app is in the exclusion list (section 1). Also try running the script as Administrator.
@@ -302,16 +331,6 @@ A: Correct. This script maps `Ctrl+Y` to paste (Emacs yank), which overrides Win
 | `Win + Backspace` | 删除前一个单词 | ⌥⌫ |
 | `Win + Delete` | 删除后一个单词 | ⌥⌦ |
 
-#### 4. IntelliJ IDEA 集成
-
-*仅在 IntelliJ IDEA (`idea64.exe`) 中生效。*
-
-| 快捷键 | 功能 | 对应 Mac |
-| --- | --- | --- |
-| `Alt + 单击` | 跳转到定义 | ⌘ + 单击 |
-
-**注意：** 如果启用了 Win/Alt 互换（第 67-72 行），请使用 `Win + 单击`。
-
 ### 自定义配置
 
 使用文本编辑器打开 `mac-style-keybindings.ahk`，可以开启以下功能：
@@ -323,8 +342,30 @@ A: Correct. This script maps `Ctrl+Y` to paste (Emacs yank), which overrides Win
 - `SetControlDelay -1` - 控件操作无延迟
 - `SetMouseDelay -1` - 鼠标操作无延迟
 
-#### Win/Alt 物理互换（第 67-76 行）- 适配 HHKB
-取消注释以物理互换 Win 和 Alt 键：
+#### Win/Alt 物理互换（第 67-91 行）- 适配 HHKB
+
+**⚠️ 重要建议：使用注册表方式交换（推荐）**
+
+脚本支持两种方式交换 Win 和 Alt 键：
+
+**方式 1：注册表方式（强烈推荐）**
+- **优点：** 零延迟、无状态同步问题、完全消除 Win 键卡住风险
+- **缺点：** 需要管理员权限、需重启系统
+- **操作步骤：**
+  1. 下载 **[SharpKeys](https://github.com/randyrants/sharpkeys)**（免费开源工具）
+  2. 配置映射：
+     - Left Windows → Left Alt
+     - Left Alt → Left Windows
+     - Right Windows → Right Alt
+     - Right Alt → Right Windows
+  3. 点击 "Write to Registry" 并重启电脑
+  4. AHK 脚本保持不变（不要取消注释第 82-91 行）
+
+**方式 2：AHK 方式（备选）**
+- **优点：** 无需管理员权限、无需重启、可随时切换
+- **缺点：** 可能偶尔出现 Win 键卡住（脚本第 35-36 行的释放处理器已缓解）
+- **操作步骤：** 取消注释脚本第 82-91 行
+
 ```ahk
 LWin::LAlt
 RWin::RAlt
@@ -333,7 +374,11 @@ RAlt::RWin
 ~LAlt Up::Send "{Blind}{vkE8}"
 ~RAlt Up::Send "{Blind}{vkE8}"
 ```
-**为什么使用？** 如果你的 HHKB 键盘开启了 DIP SW 2（硬件层面互换 Win/Alt），启用此项可以让脚本逻辑匹配你的键盘布局。
+
+**如何选择？**
+- **HHKB 用户（DIP SW 2=ON）：** 使用方式 1（注册表）效果最佳
+- **无法修改注册表：** 使用方式 2（AHK）
+- **测试或临时使用：** 使用方式 2（AHK）
 
 #### 管理员提权（第 18-25 行）
 取消注释以管理员身份运行（解决在任务管理器/注册表/游戏中失效的问题）：
@@ -349,10 +394,10 @@ if not A_IsAdmin
 ```
 
 #### 输入法切换（第 147-153 行）
-根据你的输入法选择一个选项（默认已启用选项 1）：
-- **选项 1（默认已启用）：** Windows 10/11 现代输入法 - 将 `Ctrl+Space` 映射为 `Win+Space`
-- **选项 2：** 旧版输入法 - 保持 `Ctrl+Space` 为 `Ctrl+Space`
-- **选项 3：** 完全禁用输入法切换
+根据你的输入法选择一个选项（默认为选项 2）：
+- **选项 1：** Windows 10/11 现代输入法 - 将 `Ctrl+Space` 映射为 `Win+Space`（取消第 148 行注释以启用）
+- **选项 2（默认）：** 旧版输入法 - 保持 `Ctrl+Space` 不变（无需修改）
+- **选项 3：** 完全禁用输入法切换（取消第 153 行注释）
 
 #### 鼠标自然滚动（第 216-217 行）
 取消注释以反转鼠标滚轮方向（Mac 风格）：
@@ -389,11 +434,24 @@ WheelDown::WheelUp
 
 ### 常见问题
 
-**Q: 按键错乱或卡住（如按 F 键触发反馈中心）？**
-A: 这是 Win 键卡住导致的。解决方案：
-1. 重新加载脚本（右键托盘图标 → 重新加载）
-2. 手动按下并释放 Win 键
-3. 永久解决：使用注册表方式进行 Win/Alt 互换，而非 AHK（参见 [HHKB 脚本讨论](https://github.com)）
+**Q: 按键错乱或卡住（如按退格会删除一个单词，或按 F 键触发反馈中心）？**
+
+A: 这是 Win 键卡在按下状态导致的。**发生原因：**
+- AutoHotkey 拦截 Win 键以实现 `Win+Left` → `Ctrl+Left` 等映射
+- 有时按键释放事件会丢失（高 CPU 负载、快速连按）
+- Windows 认为 Win 键一直按着，所以后续所有按键都变成 `Win+键`
+
+**解决方案：**
+1. **立即修复：** 手动按下并释放 Win 键
+2. **重新加载脚本：** 右键托盘图标 → 重新加载脚本
+3. **永久修复（v3.0+）：** 脚本已内置 Win 键释放处理器（第 35-36 行）来防止此问题
+4. **根本解决（强烈推荐）：** 如果需要 Win/Alt 互换，使用**注册表方式**而非 AHK（见"Win/Alt 物理互换"章节）。这能在驱动层面彻底消除键位卡住问题。
+5. **禁用 Option 键功能：** 如果不需要按单词操作，注释掉第 202-209 行（`#Left`、`#Right`、`#BS`、`#Del`）
+
+**预防建议：**
+- 不要过快连按 Win+键 组合
+- **最佳方案：** 使用注册表方式进行 Win/Alt 互换（自定义配置章节的方式 1）
+- 脚本的高优先级设置有助于减少此问题
 
 **Q: 脚本在某些应用中不生效？**
 A: 检查该应用是否在排除列表中（第 1 节）。也可以尝试以管理员身份运行脚本。
