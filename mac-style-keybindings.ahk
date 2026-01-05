@@ -64,33 +64,30 @@ GroupAdd "NativeNav", "ahk_exe emacs.exe"                  ; 真 Emacs
 ; GroupAdd "NativeNav", "ahk_exe GenshinImpact.exe"          ; 原神
 
 ; ==============================================================================
-; 2. 全局 Win/Alt 物理互换 (HHKB DIP2 适配 - 可选)
+; 2. 键位互换配置 (可选)
 ; ==============================================================================
-; ⚠️ 重要建议：推荐使用【注册表方式】交换 Win/Alt 键，而非 AHK 方式
+
+; --- Win/Alt 物理互换 (HHKB DIP2 适配) ---
+; ⚠️ 仅支持注册表方式交换 Win/Alt 键
 ;
-; 【推荐】注册表方式（驱动层交换）：
+; 【注册表方式】（驱动层交换 - 推荐）：
 ;   优势：零延迟、无状态同步问题、完全消除 Win 键卡住风险
 ;   工具：SharpKeys (https://github.com/randyrants/sharpkeys)
+;        或使用项目提供的 swap-win-alt.reg 文件
 ;   配置：Left Windows → Left Alt, Left Alt → Left Windows
 ;         Right Windows → Right Alt, Right Alt → Right Windows
 ;   重启后生效，无需 AHK 参与
 ;
-; 【备选】AHK 方式（应用层拦截）：
-;   如果你无法修改注册表（如公司电脑），可以使用 AHK 方式
-;   缺点：可能出现 Win 键卡住问题（虽然脚本已添加释放处理器缓解）
-;   如需启用，取消下面的注释：
+; 【不再提供 AHK 方式】：
+;   由于 AHK 方式存在 Win 键卡住问题，已移除此方式
+;   请使用注册表方式或 SharpKeys 工具进行互换
 
-; 物理 Win -> 逻辑 Alt (Command)
-; LWin::LAlt
-; RWin::RAlt
-
-; 物理 Alt -> 逻辑 Win (Option)
-; LAlt::LWin
-; RAlt::RWin
-
-; 如果启用了上面的互换，需要防止 Alt 激活菜单栏，取消下面的注释：
-; ~LAlt Up::Send "{Blind}{vkE8}"
-; ~RAlt Up::Send "{Blind}{vkE8}"
+; --- CapsLock/LCtrl 物理互换 (AHK 方式 - 可选) ---
+; 如果你习惯将 CapsLock 和左 Ctrl 互换（类似 HHKB 布局）
+; 可以取消下面的注释启用：
+;
+; CapsLock::LCtrl
+; LCtrl::CapsLock
 
 ; ==============================================================================
 ; 3. Emacs 风格光标移动 (仅在非排除列表程序中生效)

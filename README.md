@@ -116,19 +116,20 @@ Already enabled by default:
 - `SetControlDelay -1` - No delay for control operations
 - `SetMouseDelay -1` - No delay for mouse operations
 
-#### Win/Alt Physical Swap (Lines 67-91) - For HHKB Users
+#### Key Swap Configuration (Lines 67-90)
 
-**⚠️ Recommendation: Use Registry-Based Key Swap (Preferred)**
+**Win/Alt Physical Swap - For HHKB Users**
 
-The script supports two methods for swapping Win and Alt keys:
+**⚠️ Registry-Based Swap Only (Recommended)**
 
-**Method 1: Registry-Based Swap (Recommended)**
+The script now only supports registry-based Win/Alt key swap for stability:
+
 - **Pros:** Zero latency, no state sync issues, completely eliminates Win key stuck problem
 - **Cons:** Requires admin rights, system restart needed
 - **How to (Option A - Use provided .reg files):**
   1. Double-click **`swap-win-alt.reg`** to apply Win/Alt swap
   2. Restart your computer
-  3. Keep the AHK script as-is (don't uncomment lines 82-91)
+  3. The AHK script will work with the swapped keys automatically
   4. (To undo: double-click **`restore-keyboard.reg`** and restart)
 - **How to (Option B - Use SharpKeys GUI):**
   1. Download **[SharpKeys](https://github.com/randyrants/sharpkeys)** (free, open-source)
@@ -138,26 +139,19 @@ The script supports two methods for swapping Win and Alt keys:
      - Right Windows → Right Alt
      - Right Alt → Right Windows
   3. Click "Write to Registry" and restart
-  4. Keep the AHK script as-is (don't uncomment lines 82-91)
 
-**Method 2: AHK-Based Swap (Fallback)**
-- **Pros:** No admin rights needed, no restart, easy to toggle
-- **Cons:** May cause Win key to get stuck occasionally (mitigated by release handlers in lines 35-36)
-- **How to:** Uncomment lines 82-91 in the script
+**Note:** AHK-based Win/Alt swap has been removed due to Win key stuck issues.
+
+**CapsLock/LCtrl Physical Swap (Optional)**
+
+If you prefer CapsLock and Left Ctrl swapped (HHKB-style layout), uncomment lines 89-90:
 
 ```ahk
-LWin::LAlt
-RWin::RAlt
-LAlt::LWin
-RAlt::RWin
-~LAlt Up::Send "{Blind}{vkE8}"
-~RAlt Up::Send "{Blind}{vkE8}"
+CapsLock::LCtrl
+LCtrl::CapsLock
 ```
 
-**Which method to choose?**
-- **HHKB users with DIP SW 2=ON:** Use Method 1 (Registry) for best results
-- **Can't modify registry:** Use Method 2 (AHK)
-- **Testing/temporary use:** Use Method 2 (AHK)
+This swap is safe to use with AHK and won't cause stuck key issues.
 
 #### Admin Mode (Lines 18-24)
 Uncomment to run as Administrator (fixes issues in Task Manager/Registry/Games):
@@ -364,19 +358,20 @@ A: Correct. This script maps `Ctrl+Y` to paste (Emacs yank), which overrides Win
 - `SetControlDelay -1` - 控件操作无延迟
 - `SetMouseDelay -1` - 鼠标操作无延迟
 
-#### Win/Alt 物理互换（第 67-91 行）- 适配 HHKB
+#### 键位互换配置（第 67-90 行）
 
-**⚠️ 重要建议：使用注册表方式交换（推荐）**
+**Win/Alt 物理互换 - 适配 HHKB**
 
-脚本支持两种方式交换 Win 和 Alt 键：
+**⚠️ 仅支持注册表方式（推荐）**
 
-**方式 1：注册表方式（强烈推荐）**
+脚本现在仅支持注册表方式的 Win/Alt 键互换以确保稳定性：
+
 - **优点：** 零延迟、无状态同步问题、完全消除 Win 键卡住风险
 - **缺点：** 需要管理员权限、需重启系统
 - **操作步骤（方式 A - 使用提供的 .reg 文件）：**
   1. 双击 **`swap-win-alt.reg`** 应用 Win/Alt 互换
   2. 重启电脑
-  3. AHK 脚本保持不变（不要取消注释第 82-91 行）
+  3. AHK 脚本将自动适配互换后的键位
   4. （如需还原：双击 **`restore-keyboard.reg`** 并重启）
 - **操作步骤（方式 B - 使用 SharpKeys 图形界面）：**
   1. 下载 **[SharpKeys](https://github.com/randyrants/sharpkeys)**（免费开源工具）
@@ -386,26 +381,19 @@ A: Correct. This script maps `Ctrl+Y` to paste (Emacs yank), which overrides Win
      - Right Windows → Right Alt
      - Right Alt → Right Windows
   3. 点击 "Write to Registry" 并重启电脑
-  4. AHK 脚本保持不变（不要取消注释第 82-91 行）
 
-**方式 2：AHK 方式（备选）**
-- **优点：** 无需管理员权限、无需重启、可随时切换
-- **缺点：** 可能偶尔出现 Win 键卡住（脚本第 35-36 行的释放处理器已缓解）
-- **操作步骤：** 取消注释脚本第 82-91 行
+**注意：** 由于 Win 键卡住问题，已移除 AHK 方式的 Win/Alt 互换。
+
+**CapsLock/LCtrl 物理互换（可选）**
+
+如果你习惯将 CapsLock 和左 Ctrl 互换（HHKB 风格布局），可取消注释第 89-90 行：
 
 ```ahk
-LWin::LAlt
-RWin::RAlt
-LAlt::LWin
-RAlt::RWin
-~LAlt Up::Send "{Blind}{vkE8}"
-~RAlt Up::Send "{Blind}{vkE8}"
+CapsLock::LCtrl
+LCtrl::CapsLock
 ```
 
-**如何选择？**
-- **HHKB 用户（DIP SW 2=ON）：** 使用方式 1（注册表）效果最佳
-- **无法修改注册表：** 使用方式 2（AHK）
-- **测试或临时使用：** 使用方式 2（AHK）
+此互换使用 AHK 方式是安全的，不会导致卡键问题。
 
 #### 管理员提权（第 18-25 行）
 取消注释以管理员身份运行（解决在任务管理器/注册表/游戏中失效的问题）：
